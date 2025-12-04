@@ -1,0 +1,61 @@
+---
+title: "PA446 Final Project: Food Access and Grocery Store Availability in Chicago"
+author: "Kylie Vento"
+format:
+  pdf:
+    toc: true
+    number-sections: true
+execute:
+  echo: true
+  warning: true
+  message: true
+---
+
+## Step 1: Choose a Civic Problem (Context)
+
+*Select a civic/public administration issue and define a clear research question.*
+
+Chicago faces persistent disparities in food access, with grocery stores disproportionately clustered in higher-income neighborhoods. This project examines how access to grocery stores varies across Chicago’s community areas, and how those patterns align with socioeconomic conditions. The analysis uses API-retrieved point-level data for food retailers and Census API demographics merged with community-area geometries.
+
+## Step 2: Data Acquisition
+
+For this analysis, I'll be pulling from the Chicago Business License API for active grocery stores, the US Census API for poverty/income/race/SNAP participation and GeoJSON for the Chicago community boundaries.
+```{r}
+library(tidyverse)
+library(sf)
+library(janitor)
+library(httr)
+library(jsonlite)
+library(tidycensus)
+library(tigris)
+options(tigris_use_cache = TRUE)
+
+# API endpoint for all business licenses (includes food retail)
+biz_url <- "https://data.cityofchicago.org/resource/xqx5-8hwx.geojson?$limit=50000"
+
+biz <- st_read(biz_url)
+
+grocery <- biz %>%
+  filter(
+    license_status %in% c("AAI", "AAC"),  # active statuses in THIS dataset
+    license_description %in% c(
+      "Retail Food Establishment",
+      "Wholesale Food Establishment",
+      "Package Goods"
+    )
+  )
+
+chi_comm <- st_read("https://data.cityofchicago.org/resource/igwz-8jzy.geojson?$limit=1000") %>%
+  janitor::clean_names() %>%
+  rename(community = community)
+
+grocery_joined <- st_join(grocery, chi_comm, join = st_within)
+
+store_counts <- grocery_joined %>%
+  st_drop_geometry() %>%
+  count(community, name = "store_count")
+
+chi_final <- chi_comm %>%
+  left_join(store_counts, by = "community") %>%
+  replace_na(list(store_count = 0))
+```
