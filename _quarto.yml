@@ -1,0 +1,19 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "PA446 Final Project — Retail Access"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+    right:
+      - icon: github
+        href: https://github.com/kvent-stack/Final-Exam
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    number-sections: true
