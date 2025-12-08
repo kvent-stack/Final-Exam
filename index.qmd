@@ -4,11 +4,9 @@ author: "Kylie Vento"
 format:
   html:
     toc: false
-    theme: cosmo
+    theme: lux
     self-contained: false
 ---
-
-# Retail Access & Neighborhood Equity in Chicago
 
 Neighborhood access to food retailers is deeply uneven across Chicago, with some communities surrounded by commercial corridors and others facing low-density retail environments that limit everyday options. This project measures these disparities by combining business license data, ACS population estimates, and spatial analysis to examine how food retail access varies across the city’s 77 community areas — and how those patterns align with socioeconomic and geographic structures.
 

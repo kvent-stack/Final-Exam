@@ -65,7 +65,7 @@ isolated anomalies.
 **Distributional Inequality**
 
 Dispersion measures reinforce these patterns. A standard deviation of
-\~10 stores per 10,000 residents—nearly equal to the median—signals
+\~10 stores per 10,000 residents - nearly equal to the median - signals
 substantial inequality in retail availability. The wide interquartile
 range and pronounced right-skew indicate that a small number of
 communities pull the distribution upward while many remain clustered at
@@ -175,7 +175,7 @@ neighborhoods face low per-capita availability that may impede food
 security and economic mobility.
 
 This analysis demonstrates that both income and population contribute
-meaningfully to access—but do not fully explain it—suggesting that
+meaningfully to access - but do not fully explain it - suggesting that
 zoning, land-use history, and commercial corridor patterns also play
 critical roles. Ultimately, these findings underscore the need for
 coordinated planning efforts that prioritize retail equity as part of

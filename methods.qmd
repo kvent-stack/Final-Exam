@@ -14,57 +14,30 @@ execute:
 
 To build a reproducible pipeline for measuring neighborhood-level food retail access, I acquired two primary datasets through API calls: (1) Chicago’s business license dataset, which includes active food retailers, and (2) Chicago’s community area boundary file, which defines the geographic units of analysis. I also accessed tract-level population estimates from the 2022 American Community Survey (ACS) using the Census API.
 
-```{r}
-library(tidyverse)
-library(sf)
-library(tigris)
-library(janitor)
-library(arrow)
-library(knitr)
-library(scales)
-library(ggplot2)
-library(dplyr)
-library(purrr)
-library(tidyr)
-library(leaflet)
-library(tidycensus)
-
+```{r eval=FALSE}
 biz_url = "https://data.cityofchicago.org/resource/xqx5-8hwx.geojson?$limit=50000"
-biz = st_read(biz_url, quiet = TRUE)
+biz = st_read(biz_url)
 
-chi_comm = st_read(
-  "https://data.cityofchicago.org/resource/igwz-8jzy.geojson?$limit=1000",
-  quiet = TRUE
-) %>% 
+chi_comm = st_read("https://data.cityofchicago.org/resource/igwz-8jzy.geojson?$limit=1000") %>%
   clean_names()
 
-if ("community_area_name" %in% names(chi_comm)) {
-  chi_comm = chi_comm %>% rename(community = community_area_name)
-}
-
-tracts_cc = tracts(
-  state = "IL",
-  county = "Cook",
-  year = 2022,
-  cb = TRUE
-) %>% 
-  st_as_sf() %>%
+tracts_cc = tracts(state="IL", county="Cook", year=2022, cb=TRUE) %>%
+  st_as_sf() %>% 
   clean_names()
 
 acs_pop = get_acs(
-  geography = "tract",
+  geography = "tract", 
   variables = "B01003_001",
   state = "IL",
   county = "Cook",
   year = 2022,
-  geometry = FALSE,
-  show_progress = FALSE
-) %>%
+  geometry = FALSE
+) %>% 
   clean_names() %>%
-  transmute(geoid, population = estimate)
+  transmute(geoid, population=estimate)
 
 tracts_pop = tracts_cc %>%
-  left_join(acs_pop, by = "geoid") %>%
+  left_join(acs_pop, by="geoid") %>%
   st_transform(st_crs(chi_comm))
 
 tract_comm_join = st_intersection(
@@ -76,6 +49,57 @@ comm_pop = tract_comm_join %>%
   st_drop_geometry() %>%
   group_by(community) %>%
   summarise(total_population = sum(population, na.rm = TRUE))
+```
+```{r include=FALSE}
+library(tidyverse)
+library(sf)
+library(tigris)
+library(janitor)
+library(tidycensus)
+
+sf::sf_use_s2(FALSE)
+
+biz_url = "https://data.cityofchicago.org/resource/xqx5-8hwx.geojson?$limit=50000"
+biz = st_read(biz_url, quiet=TRUE)
+
+chi_comm = st_read(
+  "https://data.cityofchicago.org/resource/igwz-8jzy.geojson?$limit=1000",
+  quiet=TRUE
+) %>% clean_names()
+
+if ("community_area_name" %in% names(chi_comm)) {
+  chi_comm = chi_comm %>% rename(community = community_area_name)
+}
+
+tracts_cc = tracts(state="IL", county="Cook", year=2022, cb=TRUE) %>%
+  st_as_sf() %>%
+  clean_names()
+
+acs_pop = get_acs(
+  geography="tract",
+  variables="B01003_001",
+  state="IL",
+  county="Cook",
+  year=2022,
+  geometry=FALSE,
+  show_progress=FALSE
+) %>%
+  clean_names() %>%
+  transmute(geoid, population=estimate)
+
+tracts_pop = tracts_cc %>%
+  left_join(acs_pop, by="geoid") %>%
+  st_transform(st_crs(chi_comm))
+
+tract_comm_join = st_intersection(
+  tracts_pop,
+  chi_comm %>% select(community, geometry)
+)
+
+comm_pop = tract_comm_join %>%
+  st_drop_geometry() %>%
+  group_by(community) %>%
+  summarise(total_population=sum(population, na.rm=TRUE))
 ```
 
 # Data Wrangling & Quality Checks
@@ -102,7 +126,8 @@ n_rows
 head_rows
 ```
 
-[**Quality Check:**]{.underline} The missingness check shows that while the dataset is structurally intact, several fields contain non-critical gaps—most notably application_created_date, license_status_change_date, and ssa. These variables are administrative fields that do not affect spatial accuracy or the ability to identify active food retailers, so their missingness does not threaten the integrity of the analysis. Core fields required for this project—license status, license type, latitude/longitude coordinates, and community identifiers—are complete enough for reliable filtering and spatial joins. With 10,210 active food retail records, the dataset offers robust coverage across the city.
+[**Quality Check:**]{.underline} The missingness check shows that while the dataset is structurally intact, several fields contain non-critical gaps-most notably application_created_date, license_status_change_date, and ssa. These variables are administrative fields that do not affect spatial accuracy or the ability to identify active food retailers, so their missingness does not threaten the integrity of the analysis. Core fields required for this project-license status, license type, latitude/longitude coordinates, and community identifiers-are complete enough for reliable filtering and spatial joins. With 10,210 active food retail records, the dataset offers robust coverage across the city.  
+
 
 Next, I standardized coordinate systems for spatial alignment and assigned each food retailer to a community area through a point-in-polygon spatial join. I then aggregated food retail counts by community and checked for representation across all 77 areas.
 
@@ -121,7 +146,8 @@ summary(store_counts$store_count)
 length(unique(store_counts$community))
 ```
 
-[**Quality Check:**]{.underline} The spatial join successfully assigned nearly all food retailers to one of Chicago’s 77 community areas, but 62 records fell outside any boundary (primarily due to minor coordinate inconsistencies or locations near city edges). These were removed prior to aggregation to avoid artificially inflating totals or creating an unintended “78th” category.
+[**Quality Check:**]{.underline} The spatial join successfully assigned nearly all food retailers to one of Chicago’s 77 community areas, but 62 records fell outside any boundary (primarily due to minor coordinate inconsistencies or locations near city edges). These were removed prior to aggregation to avoid artificially inflating totals or creating an unintended “78th” category.  
+
 
 To finalize the analytic dataset, I merged community polygons, aggregated population totals, and food retail counts into a single spatial dataframe, then computed a standardized measure of food access: stores per 10,000 residents.
 
@@ -139,4 +165,5 @@ nrow(chi_final)
 any(is.na(chi_final$stores_per_10k))
 ```
 
-[**Quality Check:**]{.underline} The final merged dataset includes all 77 Chicago community areas, and the stores_per_10k metric contains no missing values, confirming successful alignment across the business license and ACS population datasets. The accessibility distribution ranges from 0 stores per 10,000 residents in the lowest-access community to approximately 55 per 10,000 residents in the highest, with a median around 10.6. This spread indicates substantial neighborhood variation in food retail density and confirms that the dataset is well-structured and ready for summary statistics, visualization, and regression modeling.
+[**Quality Check:**]{.underline} The final merged dataset includes all 77 Chicago community areas, and the stores_per_10k metric contains no missing values, confirming successful alignment across the business license and ACS population datasets. The accessibility distribution ranges from 0 stores per 10,000 residents in the lowest-access community to approximately 55 per 10,000 residents in the highest, with a median around 10.6. This spread indicates substantial neighborhood variation in food retail density and confirms that the dataset is well-structured and ready for summary statistics, visualization, and regression modeling.  
+

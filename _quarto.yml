@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "PA 446 Final Project — Retail Access"
+  title: "PA 446 Final Project"
   navbar:
     left:
       - href: index.qmd
@@ -20,6 +20,6 @@ website:
 
 format:
   html:
-    theme: cosmo
+    theme: lux
     toc: true
     number-sections: true
