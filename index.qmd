@@ -1,5 +1,5 @@
 ---
-title: "PA 446 Final Project: Neighborhood Retail Access in Chicago"
+title: "PA 446 Final Project: Neighborhood Food Access in Chicago"
 author: "Kylie Vento"
 format:
   html:

@@ -106,7 +106,7 @@ define where retail can and does exist.
 
 [**Core–Periphery Structure**]{.underline}
 
-Spatial patterns show a clear core–periphery divide. High-income,
+Spatial patterns show a clear core-periphery divide. High-income,
 high-access communities cluster downtown and along the North Side, while
 lower-income, low-access communities span much of the South, Southwest,
 and Far Southeast Sides. Between these extremes, many North and
@@ -161,8 +161,8 @@ Findings point to several potential strategies:
 -   Public–private partnerships aimed at increasing local food
     availability
 
-Such interventions should be paired with community-led planning to
-ensure that investments align with resident needs.
+Such interventions could be paired with community-led planning to ensure
+that investments align with resident needs.
 
 ------------------------------------------------------------------------
 

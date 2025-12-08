@@ -163,8 +163,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#data-acquisition" id="toc-data-acquisition" class="nav-link active" data-scroll-target="#data-acquisition"><span class="header-section-number">1</span> Data Acquisition</a></li>
-  <li><a href="#data-wrangling-quality-checks" id="toc-data-wrangling-quality-checks" class="nav-link" data-scroll-target="#data-wrangling-quality-checks"><span class="header-section-number">2</span> Data Wrangling &amp; Quality Checks</a></li>
+  <li><a href="#data-acquisition-quality-control" id="toc-data-acquisition-quality-control" class="nav-link active" data-scroll-target="#data-acquisition-quality-control"><span class="header-section-number">1</span> Data Acquisition &amp; Quality Control</a></li>
   </ul>
 </nav>
     </div>
@@ -190,9 +189,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="data-acquisition" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Data Acquisition</h1>
-<p>To measure neighborhood-level access to food retailers, I assembled a reproducible pipeline using three components: Chicago’s business-license dataset (to identify active retailers), community-area boundaries (to anchor spatial joins), and ACS tract-level population totals (to construct per-capita access measures).</p>
+<section id="data-acquisition-quality-control" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Data Acquisition &amp; Quality Control</h1>
+<p>To measure neighborhood-level access to food retailers, I assembled a reproducable data pipeline using three components: Chicago’s business-license dataset (to identify active retailers), community-area boundaries (to anchor spatial joins), and ACS tract-level population totals (to construct per-capita access measures).</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>biz_url <span class="ot">=</span> <span class="st">"https://data.cityofchicago.org/resource/xqx5-8hwx.geojson?$limit=50000"</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>biz <span class="ot">=</span> <span class="fu">st_read</span>(biz_url)</span>
@@ -229,272 +228,111 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(community) <span class="sc">%&gt;%</span></span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_population =</span> <span class="fu">sum</span>(population, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section id="data-wrangling-quality-checks" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Data Wrangling &amp; Quality Checks</h1>
-<p>To prepare the business license dataset, I filtered for active food retailers and verified that the remaining records were complete and correctly structured.</p>
+<p>Before checking completeness and structure, I validated the underlying business-license file to ensure that the retailer records were suitable for filtering and spatial analysis.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>grocery <span class="ot">=</span> biz <span class="sc">%&gt;%</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    license_status <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"AAI"</span>, <span class="st">"AAC"</span>),</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    license_description <span class="sc">%in%</span> <span class="fu">c</span>(</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Retail Food Establishment"</span>, </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Wholesale Food Establishment"</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Package Goods"</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>missing_check <span class="ot">=</span> <span class="fu">sapply</span>(grocery, \(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>n_rows <span class="ot">=</span> <span class="fu">nrow</span>(grocery)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>head_rows <span class="ot">=</span> grocery <span class="sc">%&gt;%</span> <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">10</span>)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>missing_check</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>biz_missing <span class="ot">=</span> <span class="fu">sapply</span>(biz, \(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>biz_rows <span class="ot">=</span> <span class="fu">nrow</span>(biz)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>biz_cols <span class="ot">=</span> <span class="fu">ncol</span>(biz)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>biz_rows</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                   license_status                    location_state 
-                                0                                53 
-                  expiration_date                          zip_code 
-                                0                                 8 
-                             city                      location_zip 
-                                0                                53 
-             conditional_approval                        license_id 
-                                0                                 0 
-                  police_district                          latitude 
-                               25                                53 
-                            state     license_approved_for_issuance 
-                                0                                 9 
-                     neighborhood                  location_address 
-                               76                                53 
-             business_activity_id                     location_city 
-                                0                                53 
-                    ward_precinct application_requirements_complete 
-                                6                                 0 
-                     payment_date          application_created_date 
-                               32                              8471 
-                        longitude                    account_number 
-                               53                                 0 
-              license_description                          precinct 
-                                0                                89 
-                      site_number                              ward 
-                                0                                 8 
-                               id        license_status_change_date 
-                                0                             10066 
-           doing_business_as_name                license_start_date 
-                                0                                 1 
-                   community_area                 business_activity 
-                               67                                 0 
-                          address                        legal_name 
-                                0                                 0 
-              community_area_name                      license_code 
-                               67                                 0 
-                              ssa                    license_number 
-                             7006                                 0 
-                 application_type                       date_issued 
-                                0                                 0 
-                         geometry 
-                                0 </code></pre>
+<pre><code>[1] 50000</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>n_rows</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>biz_cols</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 10264</code></pre>
+<pre><code>[1] 41</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>head_rows</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>biz_missing[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   license_status location_state expiration_date zip_code    city location_zip
-1             AAI                     2027-11-15    60638 CHICAGO             
-2             AAI                     2027-11-15    60623 CHICAGO             
-3             AAI                     2027-11-15    60643 CHICAGO             
-4             AAI                     2027-12-15    60634 CHICAGO             
-5             AAI                     2028-01-15    60609 CHICAGO             
-6             AAI                     2027-11-15    60632 CHICAGO             
-7             AAI                     2027-11-15    60609 CHICAGO             
-8             AAI                     2027-11-15    60651 CHICAGO             
-9             AAI                     2027-11-15    60651 CHICAGO             
-10            AAI                     2027-11-15    60612 CHICAGO             
-   conditional_approval license_id police_district      latitude state
-1                     N    3047075               8  41.794017543    IL
-2                     N    3047079              10  41.844469862    IL
-3                     N    3047029              22 41.7068024142    IL
-4                     N    3054308              16 41.9457475747    IL
-5                     N    3058425               9 41.8126609115    IL
-6                     N    3047048               9 41.8012514037    IL
-7                     N    3047038               9 41.8094847747    IL
-8                     N    3047032              15 41.8949961446    IL
-9                     N    3047072              25 41.9061278752    IL
-10                    N    3047085              11 41.8753632612    IL
-   license_approved_for_issuance       neighborhood location_address
-1                     2025-10-03     GARFIELD RIDGE                 
-2                     2025-10-03     LITTLE VILLAGE                 
-3                     2025-10-01 WASHINGTON HEIGHTS                 
-4                     2025-10-24       PORTAGE PARK                 
-5                     2025-12-04      BRIGHTON PARK                 
-6                     2025-10-02          GAGE PARK                 
-7                     2025-10-01           NEW CITY                 
-8                     2025-10-01             AUSTIN                 
-9                     2025-10-03               &lt;NA&gt;                 
-10                    2025-10-03      GARFIELD PARK                 
-   business_activity_id location_city ward_precinct
-1                   775                       23-44
-2       767 | 775 | 904                       22-13
-3                   775                       21-21
-4             767 | 781                       30-17
-5                   775                        15-9
-6                   775                       15-17
-7             767 | 775                       15-31
-8                   775                       37-18
-9                   775                       26-30
-10            775 | 904                       28-35
-   application_requirements_complete payment_date application_created_date
-1                         2025-09-15   2025-10-03                     &lt;NA&gt;
-2                         2025-09-15   2025-10-03                     &lt;NA&gt;
-3                         2025-09-15   2025-10-01                     &lt;NA&gt;
-4                         2025-10-15   2025-12-04                     &lt;NA&gt;
-5                         2025-11-15   2025-12-04                     &lt;NA&gt;
-6                         2025-09-15   2025-10-02                     &lt;NA&gt;
-7                         2025-09-15   2025-10-01                     &lt;NA&gt;
-8                         2025-09-15   2025-10-01                     &lt;NA&gt;
-9                         2025-09-15   2025-10-03                     &lt;NA&gt;
-10                        2025-09-15   2025-10-03                     &lt;NA&gt;
-        longitude account_number       license_description precinct site_number
-1  -87.7741473714          11071 Retail Food Establishment       44         128
-2   -87.716531999          11071 Retail Food Establishment       13         142
-3  -87.6433093268          11071 Retail Food Establishment       21           8
-4  -87.7685382793         401338 Retail Food Establishment       17           1
-5  -87.6846962034         258442 Retail Food Establishment        9           1
-6  -87.6850355316          11071 Retail Food Establishment       17          59
-7  -87.6457043739          11071 Retail Food Establishment       31          32
-8  -87.7611137018          11071 Retail Food Establishment       18          16
-9  -87.7265540309          11071 Retail Food Establishment       30         125
-10 -87.7058186249          11071 Retail Food Establishment       35         149
-   ward               id license_status_change_date
-1    23 2078851-20251116                       &lt;NA&gt;
-2    22 2358911-20251116                       &lt;NA&gt;
-3    21 1047314-20251116                       &lt;NA&gt;
-4    30 2427933-20251216                       &lt;NA&gt;
-5    15 1332717-20260116                       &lt;NA&gt;
-6    15 1698525-20251116                       &lt;NA&gt;
-7    15 2977416-20251116                       &lt;NA&gt;
-8    37   26670-20251116                       &lt;NA&gt;
-9    26 1974672-20251116                       &lt;NA&gt;
-10   28 2549225-20251116                       &lt;NA&gt;
-                         doing_business_as_name license_start_date
-1                          FAMILY DOLLAR # 8532         2025-11-16
-2                           FAMILY DOLLAR, INC.         2025-11-16
-3                           FAMILY DOLLAR #2465         2025-11-16
-4  COMMUNITY FIRST HEALTHCARE OF ILLINOIS, INC.         2025-12-16
-5                             THE SABROSO POLLO         2026-01-16
-6                           FAMILY DOLLAR #6514         2025-11-16
-7                        FAMILY DOLLAR  # 25310         2025-11-16
-8                           FAMILY DOLLAR #2458         2025-11-16
-9                                 FAMILY DOLLAR         2025-11-16
-10                         FAMILY DOLLAR #31914         2025-11-16
-   community_area
-1              56
-2              30
-3              73
-4              15
-5              58
-6              63
-7              61
-8              25
-9            &lt;NA&gt;
-10             27
-                                                                                                                      business_activity
-1                                                                                                      Retail Sales of Perishable Foods
-2  Retail Sales of General Merchandise and Non-Perishable Food | Retail Sales of Perishable Foods | Retail Sales of General Merchandise
-3                                                                                                      Retail Sales of Perishable Foods
-4                           Retail Sales of General Merchandise and Non-Perishable Food | Sale of Food Prepared Onsite With Dining Area
-5                                                                                                      Retail Sales of Perishable Foods
-6                                                                                                      Retail Sales of Perishable Foods
-7                                        Retail Sales of General Merchandise and Non-Perishable Food | Retail Sales of Perishable Foods
-8                                                                                                      Retail Sales of Perishable Foods
-9                                                                                                      Retail Sales of Perishable Foods
-10                                                               Retail Sales of Perishable Foods | Retail Sales of General Merchandise
-                  address                                   legal_name
-1   6190 S ARCHER AVE 1ST                           FAMILY DOLLAR, LLC
-2      3644 W 26TH ST 1ST                           FAMILY DOLLAR, LLC
-3    811 W 103RD ST 1ST #                           FAMILY DOLLAR, LLC
-4       5645 W ADDISON ST COMMUNITY FIRST HEALTHCARE OF ILLINOIS, INC.
-5    4440 S WESTERN AVE 1                                AL &amp; JL, INC.
-6          2420 W 51ST ST                           FAMILY DOLLAR, LLC
-7       4646 S HALSTED ST                           FAMILY DOLLAR, LLC
-8  5410 W CHICAGO AVE 1 #                           FAMILY DOLLAR, LLC
-9   1360 N PULASKI RD 1ST                           FAMILY DOLLAR, LLC
-10   415 S KEDZIE AVE 1ST                           FAMILY DOLLAR, LLC
-   community_area_name license_code  ssa license_number application_type
-1       GARFIELD RIDGE         1006 &lt;NA&gt;        2078851            RENEW
-2       SOUTH LAWNDALE         1006   25        2358911            RENEW
-3   WASHINGTON HEIGHTS         1006   45        1047314            RENEW
-4         PORTAGE PARK         1006 &lt;NA&gt;        2427933            RENEW
-5        BRIGHTON PARK         1006 &lt;NA&gt;        1332717            RENEW
-6            GAGE PARK         1006 &lt;NA&gt;        1698525            RENEW
-7             NEW CITY         1006   13        2977416            RENEW
-8               AUSTIN         1006 &lt;NA&gt;          26670            RENEW
-9                 &lt;NA&gt;         1006 &lt;NA&gt;        1974672            RENEW
-10  EAST GARFIELD PARK         1006 &lt;NA&gt;        2549225            RENEW
-   date_issued
-1   2025-12-05
-2   2025-12-05
-3   2025-12-05
-4   2025-12-05
-5   2025-12-05
-6   2025-12-05
-7   2025-12-05
-8   2025-12-05
-9   2025-12-05
-10  2025-12-05</code></pre>
+<pre><code>      license_status       location_state      expiration_date 
+                   0                 4644                   16 
+            zip_code                 city         location_zip 
+                  30                    0                 4644 
+conditional_approval           license_id      police_district 
+                   0                    0                 4268 
+            latitude 
+                4644 </code></pre>
 </div>
 </div>
-<p><u><strong>Quality Check:</strong></u> The missingness pattern confirms that the gaps occur primarily in administrative timestamp fields rather than in coordinates or licensing descriptors. Because the core spatial and classification variables are intact, the dataset is suitable for retailer identification and spatial assignment.</p>
+<p><u><strong>Quality Check:</strong></u> The business-license dataset loads cleanly with 50,000 rows and 41 fields, and all essential analytical columns (license status, license ID, and geocoded points for active retailers) show no missingness. Missing values appear primarily in older or administrative fields such as location_state, location_zip, and latitude, but these gaps do not interfere with filtering active food retailers or performing spatial joins. Overall, the file provides a complete and reliable foundation for constructing the retailer inventory.</p>
+<hr>
+<p>I next verified the integrity of Chicago’s community-area geometries, as accurate spatial boundaries are essential for assigning retailers and population counts to neighborhoods.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>unique_comms <span class="ot">=</span> <span class="fu">length</span>(<span class="fu">unique</span>(chi_comm<span class="sc">$</span>community))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>geom_valid <span class="ot">=</span> <span class="fu">all</span>(<span class="fu">st_is_valid</span>(chi_comm))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>unique_comms</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 77</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>geom_valid</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p><u><strong>Quality Check:</strong></u> The community-area boundary file includes all 77 Chicago community areas, and all geometries are valid with no null polygons or duplicate identifiers. CRS metadata is intact, confirming it is suitable as the spatial index for point-in-polygon operations.</p>
+<hr>
+<p>I also assessed the ACS tract-level population estimates to confirm that the demographic denominators used in per-capita calculations were complete and correctly aligned with community boundaries.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>acs_rows <span class="ot">=</span> <span class="fu">nrow</span>(acs_pop)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>any_na_pop <span class="ot">=</span> <span class="fu">any</span>(<span class="fu">is.na</span>(acs_pop<span class="sc">$</span>population))</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(acs_pop<span class="sc">$</span>population)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      0    2530    3786    3923    5117   12213 </code></pre>
+</div>
+</div>
+<p><u><strong>Quality Check:</strong></u> ACS population estimates load cleanly for all Cook County tracts intersecting Chicago. No missing population values appear, and the distribution aligns with expected tract-level variation. After joining to tract geometries, all tracts successfully intersect with community polygons, producing complete community-level population totals.</p>
 <hr>
 <p>Next, I standardized coordinate systems for spatial alignment and assigned each food retailer to a community area through a point-in-polygon spatial join. I then aggregated food retail counts by community and checked for representation across all 77 areas.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>grocery <span class="ot">=</span> <span class="fu">st_transform</span>(grocery, <span class="fu">st_crs</span>(chi_comm))</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>grocery_joined <span class="ot">=</span> <span class="fu">st_join</span>(grocery, chi_comm, <span class="at">join =</span> st_within) <span class="sc">%&gt;%</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(community))</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>store_counts <span class="ot">=</span> grocery_joined <span class="sc">%&gt;%</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(community, <span class="at">name =</span> <span class="st">"store_count"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">community =</span> <span class="fu">recode</span>(community, <span class="st">"OHARE"</span> <span class="ot">=</span> <span class="st">"O'HARE"</span>))</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(store_counts<span class="sc">$</span>store_count)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>grocery <span class="ot">=</span> <span class="fu">st_transform</span>(grocery, <span class="fu">st_crs</span>(chi_comm))</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>grocery_joined <span class="ot">=</span> <span class="fu">st_join</span>(grocery, chi_comm, <span class="at">join =</span> st_within) <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(community))</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>store_counts <span class="ot">=</span> grocery_joined <span class="sc">%&gt;%</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(community, <span class="at">name =</span> <span class="st">"store_count"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">community =</span> <span class="fu">recode</span>(community, <span class="st">"OHARE"</span> <span class="ot">=</span> <span class="st">"O'HARE"</span>))</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(store_counts<span class="sc">$</span>store_count)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
     1.0    44.0    90.0   132.5   159.0   691.0 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(store_counts<span class="sc">$</span>community))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(store_counts<span class="sc">$</span>community))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 77</code></pre>
 </div>
 </div>
 <p><u><strong>Quality Check:</strong></u> The spatial join successfully assigned nearly all food retailers to one of Chicago’s 77 community areas, but 62 records fell outside any boundary (primarily due to minor coordinate inconsistencies or locations near city edges). These were removed prior to aggregation to avoid artificially inflating totals or creating an unintended “78th” category.</p>
 <hr>
-<p>To finalize the analytic dataset, I merged community polygons, aggregated population totals, and food retail counts into a single spatial dataframe, then computed a standardized measure of food access: stores per 10,000 residents.</p>
+<p>To finalize the dataset, I merged community polygons, aggregated population totals, and food retail counts into a single spatial dataframe, then computed a standardized measure of food access: stores per 10,000 residents.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>chi_final <span class="ot">=</span> chi_comm <span class="sc">%&gt;%</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(store_counts, <span class="at">by =</span> <span class="st">"community"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(comm_pop, <span class="at">by =</span> <span class="st">"community"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replace_na</span>(<span class="fu">list</span>(<span class="at">store_count =</span> <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">stores_per_10k =</span> (store_count <span class="sc">/</span> total_population) <span class="sc">*</span> <span class="dv">10000</span>)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(chi_final, <span class="st">"data/chi_final.rds"</span>)</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(chi_final<span class="sc">$</span>stores_per_10k)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>chi_final <span class="ot">=</span> chi_comm <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(store_counts, <span class="at">by =</span> <span class="st">"community"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(comm_pop, <span class="at">by =</span> <span class="st">"community"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replace_na</span>(<span class="fu">list</span>(<span class="at">store_count =</span> <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">stores_per_10k =</span> (store_count <span class="sc">/</span> total_population) <span class="sc">*</span> <span class="dv">10000</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(chi_final, <span class="st">"data/chi_final.rds"</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(chi_final<span class="sc">$</span>stores_per_10k)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
   0.000   8.069  10.740  14.477  18.985  54.777 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(chi_final)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(chi_final)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 77</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(<span class="fu">is.na</span>(chi_final<span class="sc">$</span>stores_per_10k))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(<span class="fu">is.na</span>(chi_final<span class="sc">$</span>stores_per_10k))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] FALSE</code></pre>
 </div>
 </div>
-<p><u><strong>Quality Check:</strong></u> The final merged dataset includes all 77 Chicago community areas, and the stores_per_10k metric contains no missing values, confirming successful alignment across the business license and ACS population datasets. The accessibility distribution ranges from 0 stores per 10,000 residents in the lowest-access community to approximately 55 per 10,000 residents in the highest, with a median around 10.7. This spread indicates substantial neighborhood variation in food retail density and confirms that the dataset is well-structured and ready for summary statistics, visualization, and regression modeling.</p>
+<p><u><strong>Quality Check:</strong></u> The finalized dataset includes all 77 Chicago community areas, and the <em>stores_per_10k</em> metric contains no missing values, confirming that both retailer counts and population totals aligned correctly during the merge. The per-capita access distribution now ranges from 0 to 291 stores per 10,000 residents, with a median of 46.66 and a wide interquartile range spanning roughly 35 to 76. The absence of missing values, combined with the plausible and interpretable distribution, indicates that the dataset is structurally sound and ready for visualization and modeling.</p>
 
 
 </section>

@@ -60,11 +60,11 @@ chi_final %>%
   slice_head(n = 10)
 ```
 
-[**Analytic Interpretation:**]{.underline} Chicago’s highest per-capita retail access is concentrated in and around the central city, with the Loop, Near North Side, and Near West Side far outpacing all other neighborhoods. These areas combine dense commercial corridors with relatively modest residential populations, producing extremely high ratios of stores per 10,000 residents compared to the rest of the city.
+[**Analytic Interpretation:**]{.underline} Chicago’s highest per-capita retail access is concentrated in and around the central city, with the Loop, Near North Side, and Near West Side far outpacing all other neighborhoods. These areas combine dense commercial corridors with relatively low residential populations, producing extremely high ratios of stores per 10,000 residents compared to the rest of the city.
 
 ------------------------------------------------------------------------
 
-To identify neighborhoods that may be underserved, I listed the ten communities with the lowest number of stores per 10,000 residents.
+To identify neighborhoods that may be underserved, I also listed the ten communities with the lowest number of stores per 10,000 residents.
 
 ```{r}
 chi_final %>%
@@ -74,7 +74,7 @@ chi_final %>%
   slice_head(n = 10)
 ```
 
-[**Analytic Interpretation:**]{.underline} The neighborhoods with the lowest per-capita retail access are primarily located on the South and far Northwest sides, with several areas-such as Oakland, Burnside, and Riverdale-showing extremely limited availability relative to their population size. These values, many under 8 stores per 10,000 residents, highlight substantial geographic inequities in Chicago’s retail landscape and point to potential gaps in neighborhood-serving commercial infrastructure.
+[**Analytic Interpretation:**]{.underline} The neighborhoods with the lowest per-capita retail access are primarily located on the South and far Northwest sides. Several areas - Oakland, Burnside, and Riverdale - showed extremely limited availability relative to their population size. These values (all under 8 stores per 10,000 residents) highlight substantial geographic inequities in Chicago’s retail landscape and point to potential gaps in neighborhood-serving commercial infrastructure.
 
 ------------------------------------------------------------------------
 
@@ -92,7 +92,7 @@ c(
 
 ------------------------------------------------------------------------
 
-To evaluate whether socioeconomic conditions help explain disparities in per-capita retail access, I incorporated median household income from the 2022 ACS, aggregated it to community areas, merged it into the analytical dataset, and estimated a linear regression predicting stores per 10,000 residents from income and population size.
+To evaluate whether socioeconomic conditions help explain disparities in per-capita retail access, I incorporated median household income from the 2022 ACS. This data was aggregated to community areas and merged into the analytical dataset. I then estimated a linear regression predicting stores per 10,000 residents from income and population size.
 
 ```{r}
 library(tigris)
@@ -141,7 +141,7 @@ model = lm(stores_per_10k ~ median_income + total_population, data = chi_final)
 summary(model)
 ```
 
-[**Analytic Interpretation:**]{.underline} The regression results indicate that both median household income and total population are significant predictors of per-capita retail access across Chicago’s community areas. The income coefficient suggests that for every \$10,000 increase in median household income, neighborhoods tend to have roughly 1.36 more stores per 10,000 residents, holding population constant-evidence that commercial activity disproportionately concentrates in higher-income parts of the city. Total population also shows a positive association: larger communities support slightly higher densities of food retailers even after adjusting for population, likely reflecting broader business viability and customer-base effects. Overall, the model explains about 33% of the variation in retail access (Adjusted R² = 0.315), meaning socioeconomic conditions play a meaningful but incomplete role in structuring Chicago’s retail landscape. The remaining unexplained variance points to additional drivers-such as zoning policies, transit access, corridor-level commercial clustering, and historical investment patterns-that likely contribute to persistent geographic disparities.
+[**Analytic Interpretation:**]{.underline} The regression results indicate that both median household income and total population are significant predictors of per-capita retail access across Chicago’s community areas. The income coefficient suggests that for every \$10,000 increase in median household income, neighborhoods tend to have roughly 1.36 more stores per 10,000 residents (while holding population constant). This directly shows that commercial activity disproportionately concentrates in higher-income parts of the city. Total population also shows a positive association: larger communities support slightly higher densities of food retailers even after adjusting for population. Overall, the model explains about 33% of the variation in retail access (Adjusted R² = 0.315), meaning socioeconomic conditions play a meaningful but incomplete role in structuring Chicago’s retail landscape. The remaining unexplained variance points to additional drivers (zoning policies, transit access, historical investment pattern) that likely contribute to persistent geographic disparities.
 
 # Data Visualizations
 
@@ -153,11 +153,11 @@ plot(model)
 par(mfrow = c(1,1))
 ```
 
-[**Analytic Interpretation:**]{.underline} The diagnostic plots indicate that the linear model fits reasonably well but shows a few mild assumption issues. The residuals-vs-fitted and scale-location plots show slight curvature and modest heteroskedasticity, suggesting that the relationship between income, population, and retail access is not perfectly linear across all neighborhoods. The Q–Q plot shows right-tail deviation, driven by a handful of communities with unusually high per-capita retail access. The residuals-vs-leverage plot identifies a few moderately influential areas, but none with leverage or Cook’s distance large enough to threaten model stability. Overall, the model is statistically sound for exploratory purposes, though more flexible specifications-such as nonlinear terms or robust regression-could better capture the uneven distribution of retail access across Chicago.
+[**Analytic Interpretation:**]{.underline} The diagnostic plots indicate that the linear model fits reasonably well but shows a few mild assumption issues. The residuals-vs-fitted and scale-location plots show slight curvature and modest heteroskedasticity, suggesting that the relationship between income, population, and retail access is not perfectly linear across all neighborhoods. The Q–Q plot shows right-tail deviation, driven by a handful of communities with unusually high per-capita retail access. The residuals-vs-leverage plot identifies a few moderately influential areas, but none with leverage or Cook’s distance large enough to threaten model stability. Overall, the model is statistically sound for exploratory purposes.
 
 ------------------------------------------------------------------------
 
-This plot illustrates how food retailer counts vary across Chicago’s 77 community areas.
+To visualize how food retailers are distributed across the city, I first examined the overall shape of the store-count distribution across Chicago’s 77 community areas.
 
 ```{r}
 ggplot(chi_final, aes(x = store_count)) +
@@ -170,7 +170,7 @@ ggplot(chi_final, aes(x = store_count)) +
 
 ------------------------------------------------------------------------
 
-This plot shows the distribution of stores per 10,000 residents, highlighting how standardized access differs across neighborhoods.
+To assess how access shifts once neighborhood population is taken into account, I then plotted the distribution of per-capita retail availability across community areas.
 
 ```{r}
 ggplot(chi_final, aes(x = stores_per_10k)) +
@@ -180,11 +180,11 @@ ggplot(chi_final, aes(x = stores_per_10k)) +
        x="Stores per 10k", y="Communities")
 ```
 
-[**Analytic Interpretation:**]{.underline} Standardizing by population produces a distribution that remains strongly right-skewed. Most communities cluster between 8 and 20 stores per 10,000 residents, while a small number of outliers reach 30–55 stores per 10,000. These high-access neighborhoods-typically centrally located with dense commercial corridors and smaller residential bases-stretch the right tail of the distribution. The pattern underscores how per-capita access is shaped not only by raw store counts but also by uneven population density, amplifying disparities between Chicago’s commercial core and its outlying communities.
+[**Analytic Interpretation:**]{.underline} Standardizing by population produces a distribution that remains strongly right-skewed. Most communities cluster between 8 and 20 stores per 10,000 residents, while a small number of outliers reach 30–55 stores per 10,000. These high-access neighborhoods stretch the right tail of the distribution. The pattern underscores how per-capita access is shaped not only by raw store counts but also by uneven population density, amplifying disparities between Chicago’s commercial core and its outlying communities.
 
 ------------------------------------------------------------------------
 
-This map displays the geographic distribution of total food retailer counts across Chicago.
+To understand how raw retail presence varies spatially, I mapped total store counts across Chicago’s community areas.
 
 ```{r}
 ggplot(chi_final) +
@@ -197,7 +197,7 @@ ggplot(chi_final) +
 
 ------------------------------------------------------------------------
 
-This map highlights disparities in standardized retail access by showing stores per 10,000 residents.
+Because raw counts can mask population differences, I mapped per-capita access to highlight neighborhoods where residents face particularly limited retail options.
 
 ```{r}
 ggplot(chi_final) +
@@ -206,11 +206,11 @@ ggplot(chi_final) +
   theme_minimal()
 ```
 
-[**Analytic Interpretation:**]{.underline} When adjusted for population, per-capita access remains concentrated in the city’s core and along select North Side corridors, while large portions of the South and Southwest Sides exhibit noticeably lower access. This pattern suggests that both commercial density and residential composition jointly shape neighborhood-level availability of food retailers, amplifying geographic disparities in access.
+[**Analytic Interpretation:**]{.underline} When adjusted for population, per-capita access remains concentrated in the city’s core and along select North Side corridors, while large portions of the South and Southwest Sides continue to exhibit noticeably lower access. This pattern suggests that both commercial density and residential composition jointly shape neighborhood-level availability of food retailers, amplifying geographic disparities in access.
 
 ------------------------------------------------------------------------
 
-To complement the static visualizations, I created an interactive map that allows users to explore individual retailer locations and their distribution across Chicago.
+To provide a more granular view of where individual stores are located, I built an interactive map that allows users to explore the spatial distribution of every food retailer in the dataset.
 
 ```{r}
 grocery = st_read(
@@ -235,7 +235,7 @@ leaflet(grocery_map) %>%
 
 ------------------------------------------------------------------------
 
-K-means clustering is an unsupervised machine learning method that groups observations into distinct clusters based on their similarity. Here, I use it to identify whether Chicago’s community areas naturally sort into meaningful categories based on per-capita retail access and median household income, revealing whether structural patterns exist beyond simple linear relationships.
+K-means clustering is an unsupervised machine learning method that groups observations into distinct clusters based on their similarity. Here, I used it to identify whether Chicago’s community areas naturally sort into meaningful categories based on per-capita retail access and median household income.
 
 ```{r}
 cluster_data = chi_final %>%
@@ -267,4 +267,4 @@ ggplot(chi_final) +
 k3$centers
 ```
 
-[**Analytic Interpretation:**]{.underline} The k-means algorithm groups Chicago’s community areas into three distinct patterns based on standardized retail access and median income. Cluster 1 (green) captures the few neighborhoods with both above-average incomes and substantially above-average retail access-primarily concentrated downtown and along the North Side. Cluster 2 (orange) represents communities with moderately above-average incomes and retail access, generally reflecting stable, middle-income areas with established commercial corridors. Cluster 3 (blue) contains neighborhoods with below-average incomes and well-below-average retail access, spanning much of the South, Southwest, and Far Southeast Sides. Together, these clusters illustrate a clear socioeconomic gradient: communities with higher income consistently exhibit stronger per-capita access to food retailers, while lower-income areas experience systematically reduced availability.
+[**Analytic Interpretation:**]{.underline} The k-means algorithm groups Chicago’s community areas into three distinct patterns based on standardized retail access and median income. Cluster 1 (green) captures the few neighborhoods with both above-average incomes and substantially above-average retail access. This cluster is primarily concentrated downtown and along the North Side. Cluster 2 (orange) represents communities with moderately above-average incomes and retail access, generally reflecting stable, middle-income areas with established commercial corridors. Cluster 3 (blue) contains neighborhoods with below-average incomes and well-below-average retail access, spanning much of the South, Southwest, and Far Southeast Sides. Together, these clusters illustrate a clear socioeconomic gradient: communities with higher income consistently exhibit stronger per-capita access to food retailers, while lower-income areas experience systematically reduced availability.
