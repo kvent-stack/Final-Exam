@@ -28,18 +28,18 @@ to food.
 Food retailer availability is highly uneven across Chicago. While most
 communities contain between 40 and 150 stores, a small set of
 central-city neighborhoods - particularly those in and around the Loop -
-support several hundred retailers. The citywide **median store count is
-79**, but the maximum exceeds **690**, producing a strongly right-skewed
+support several hundred retailers. The citywide median store count is
+79, but the maximum exceeds 690, producing a strongly right-skewed
 distribution that reflects Chicago’s concentrated commercial core.
 
 When standardized by population, these disparities remain pronounced.
-Per-capita access ranges from **0 to nearly 55 stores per 10,000
-residents**, with half of all neighborhoods falling below **10.7**
-stores per 10,000. High-access communities are primarily located in the
-city’s core and select North Side corridors, while many South and
-Southwest Side neighborhoods sit in the lowest-access group. In
-practical terms, residents in some neighborhoods experience **five to
-ten times** the retail availability found in others.
+Per-capita access ranges from 0 to nearly 55 stores per 10,000
+residents, with half of all neighborhoods falling below 10.7 stores per
+10,000. High-access communities are primarily located in the city’s core
+and select North Side corridors, while many South and Southwest Side
+neighborhoods sit in the lowest-access group. In practical terms,
+residents in some neighborhoods experience five to ten times the retail
+availability found in others.
 
 **High-Access and Low-Access Neighborhood Profiles**
 
