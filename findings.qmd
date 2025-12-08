@@ -23,7 +23,7 @@ to food.
 
 # Key Analytical Findings
 
-**Neighborhood-Level Variation in Retail Access**
+[**Neighborhood-Level Variation in Retail Access**]{.underline}
 
 Food retailer availability is highly uneven across Chicago. While most
 communities contain between 40 and 150 stores, a small set of
@@ -41,7 +41,9 @@ neighborhoods sit in the lowest-access group. In practical terms,
 residents in some neighborhoods experience five to ten times the retail
 availability found in others.
 
-**High-Access and Low-Access Neighborhood Profiles**
+------------------------------------------------------------------------
+
+[**High-Access and Low-Access Neighborhood Profiles**]{.underline}
 
 The communities with the highest per-capita retail access cluster in or
 near the central business district. These areas combine dense commercial
@@ -55,7 +57,9 @@ modest retail availability diluted across more residents. The pattern
 reflects structural geography - not isolated anomalies - and aligns with
 historical development and investment trajectories across the city.
 
-**Distributional Inequality**
+------------------------------------------------------------------------
+
+[**Distributional Inequality**]{.underline}
 
 Measures of dispersion further underscore the extent of inequality. The
 standard deviation of per-capita access is nearly equal to the median,
@@ -71,7 +75,7 @@ substantially based on residential location.
 
 # Socioeconomic Drivers of Access
 
-**Income as a Predictor of Retail Availability**
+[**Income as a Predictor of Retail Availability**]{.underline}
 
 Regression results show that median household income is a strong
 predictor of per-capita retail access. Holding population constant, a
@@ -86,7 +90,9 @@ partially. The remaining variation likely reflects zoning restrictions,
 the placement of commercial corridors, transit accessibility, historical
 development patterns, and the spatial limits of mixed-use districts.
 
-**Population Size and Commercial Concentration**
+------------------------------------------------------------------------
+
+[**Population Size and Commercial Concentration**]{.underline}
 
 While total population is also positively associated with per-capita
 access, the effect is more modest. Larger communities appear able to
@@ -98,7 +104,7 @@ define where retail can and does exist.
 
 # Spatial Patterns and Geographic Equity
 
-**Core–Periphery Structure**
+[**Core–Periphery Structure**]{.underline}
 
 Spatial patterns show a clear core–periphery divide. High-income,
 high-access communities cluster downtown and along the North Side, while
@@ -107,7 +113,9 @@ and Far Southeast Sides. Between these extremes, many North and
 Northwest Side communities fall into a moderate-access, moderate-income
 band - neither underserved nor highly amenitized.
 
-**Implications for Residents**
+------------------------------------------------------------------------
+
+[**Implications for Residents**]{.underline}
 
 For residents of high-access neighborhoods, daily needs can be met
 through dense, walkable, and varied retail environments. In contrast,
@@ -139,7 +147,7 @@ isolated or idiosyncratic outcomes.
 
 # Policy Implications
 
-**Strengthening Retail Availability in Underserved Areas**
+[**Strengthening Retail Availability in Underserved Areas**]{.underline}
 
 Findings point to several potential strategies:
 
@@ -156,7 +164,9 @@ Findings point to several potential strategies:
 Such interventions should be paired with community-led planning to
 ensure that investments align with resident needs.
 
-**Integrating Transit and Retail Planning**
+------------------------------------------------------------------------
+
+[**Integrating Transit and Retail Planning**]{.underline}
 
 Because many low-access communities are also transit-limited, aligning
 CTA planning with retail investment could strengthen neighborhood
@@ -164,7 +174,9 @@ resilience. Improved bus frequency, new stop placement near commercial
 corridors, or micro-mobility options could meaningfully increase access
 without major retail expansion.
 
-**Equity Considerations**
+------------------------------------------------------------------------
+
+[**Equity Considerations**]{.underline}
 
 The concentration of retail access in wealthier and more centrally
 located neighborhoods raises questions about equitable distribution of
