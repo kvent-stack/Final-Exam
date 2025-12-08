@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Kylie Vento">
 
-<title>PA 446 Final Project: Neighborhood Retail Access in Chicago – PA 446 Final Project — Retail Access</title>
+<title>Findings &amp; Implications – PA 446 Final Project — Retail Access</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -73,7 +72,7 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-fixed fullcontent quarto-light">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -91,7 +90,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -103,7 +102,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Analysis</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./findings.html"> 
+    <a class="nav-link active" href="./findings.html" aria-current="page"> 
 <span class="menu-text">Findings</span></a>
   </li>  
 </ul>
@@ -124,25 +123,33 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">1</span> Overview</a></li>
+  <li><a href="#key-analytical-findings" id="toc-key-analytical-findings" class="nav-link" data-scroll-target="#key-analytical-findings"><span class="header-section-number">2</span> Key Analytical Findings</a></li>
+  <li><a href="#socioeconomic-drivers-of-access" id="toc-socioeconomic-drivers-of-access" class="nav-link" data-scroll-target="#socioeconomic-drivers-of-access"><span class="header-section-number">3</span> Socioeconomic Drivers of Access</a></li>
+  <li><a href="#spatial-patterns-and-geographic-equity" id="toc-spatial-patterns-and-geographic-equity" class="nav-link" data-scroll-target="#spatial-patterns-and-geographic-equity"><span class="header-section-number">4</span> Spatial Patterns and Geographic Equity</a></li>
+  <li><a href="#policy-implications" id="toc-policy-implications" class="nav-link" data-scroll-target="#policy-implications"><span class="header-section-number">5</span> Policy Implications</a></li>
+  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions"><span class="header-section-number">6</span> Conclusions</a></li>
+  <li><a href="#future-directions" id="toc-future-directions" class="nav-link" data-scroll-target="#future-directions"><span class="header-section-number">7</span> Future Directions</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">PA 446 Final Project: Neighborhood Retail Access in Chicago</h1>
+<h1 class="title">Findings &amp; Implications</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Kylie Vento </p>
-          </div>
-  </div>
     
   
     
@@ -153,10 +160,79 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="retail-access-neighborhood-equity-in-chicago" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Retail Access &amp; Neighborhood Equity in Chicago</h1>
-<p>Neighborhood access to food retailers is deeply uneven across Chicago, with some communities surrounded by commercial corridors and others facing low-density retail environments that limit everyday options. This project measures these disparities by combining business license data, ACS population estimates, and spatial analysis to examine how food retail access varies across the city’s 77 community areas — and how those patterns align with socioeconomic and geographic structures.</p>
-<p>This site summarizes that work, providing a reproducible analysis pipeline, exploratory data visualizations, and key findings on neighborhood equity and food access.</p>
+<section id="overview" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Overview</h1>
+<p>This project examined neighborhood-level disparities in food retail access across Chicago’s 77 community areas, using business license records, ACS demographics, and spatial data integration. The analysis revealed substantial variation in both the total number of food retailers and the per-capita accessibility of those retailers, with clear geographic and socioeconomic patterns. These findings highlight the extent to which food access is shaped by a combination of commercial density, residential population characteristics, and the spatial configuration of the city itself.</p>
+</section>
+<section id="key-analytical-findings" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Key Analytical Findings</h1>
+<p><strong>Neighborhood-Level Variation in Retail Access</strong></p>
+<p>Across Chicago, food retailer availability is highly uneven, with a small group of central-city neighborhoods dominating total store counts. The Loop, Near North Side, and Near West Side contain several hundred food retail establishments, far exceeding the citywide median of 89 stores. This reflects Chicago’s long-standing commercial clustering: mixed-use downtown areas absorb an outsized share of the region’s retail activity.</p>
+<p>When standardized by population, these disparities persist. Per-capita access ranges from 0 to nearly 55 stores per 10,000 residents, with half of all communities falling below roughly 11 stores per 10,000 residents. Central and North Side neighborhoods continue to dominate the upper tail, while many South and Southwest Side communities exhibit single-digit access levels.</p>
+<p>In effect, residents in some neighborhoods have five to ten times the retail availability experienced in others.</p>
+<p><strong>High-Access and Low-Access Neighborhood Profiles</strong></p>
+<p>The ten neighborhoods with the highest stores-per-capita values are overwhelmingly located in or adjacent to the central business district. Many combine dense concentrations of commercial property, a robust daytime population, and comparatively smaller residential bases.</p>
+<p>This produces extremely high per-capita ratios even when raw store counts are moderate.</p>
+<p>By contrast, the lowest-access neighborhoods are concentrated on the South Side and far Northwest Side, including areas like Oakland, Burnside, and Riverdale. These communities often pair limited commercial corridors with larger residential populations, resulting in low-access environments even when modest retail exists.</p>
+<p>These disparities point to structural geographic patterns rather than isolated anomalies.</p>
+<p><strong>Distributional Inequality</strong></p>
+<p>Dispersion measures reinforce these patterns. A standard deviation of ~10 stores per 10,000 residents—nearly equal to the median—signals substantial inequality in retail availability. The wide interquartile range and pronounced right-skew indicate that a small number of communities pull the distribution upward while many remain clustered at lower-access levels.</p>
+<p>Collectively, the descriptive results show that food retail in Chicago is not distributed proportionally to population and that residents experience markedly different retail environments depending on where they live.</p>
+</section>
+<section id="socioeconomic-drivers-of-access" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Socioeconomic Drivers of Access</h1>
+<p><strong>Income as a Predictor of Retail Availability</strong></p>
+<p>Regression modeling showed that median household income is significantly and positively associated with per-capita retail access. Wealthier communities tend to support more food retailers, even after controlling for population size. This suggests that retailers preferentially locate in areas with stronger consumer purchasing power, reinforcing the city’s economic geography.</p>
+<p>While the model explains roughly one-third of variation in access (Adjusted R² ≈ 0.34), the sizable residuals indicate that income alone does not capture the full set of forces that determine retail presence. Zoning, land use, historical investment, and the location of commercial corridors all likely play significant roles.</p>
+<p><strong>Population Size and Commercial Concentration</strong></p>
+<p>Total population also shows a positive relationship with retail access, but its influence is more modest. Larger communities may sustain more businesses simply because they contain more potential customers. But the strongest concentration continues to be in areas that combine commercial density with high-income or mixed-use land patterns.</p>
+<p>Overall, socioeconomic conditions explain a meaningful portion of the city’s retail landscape, but not all of it.</p>
+</section>
+<section id="spatial-patterns-and-geographic-equity" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Spatial Patterns and Geographic Equity</h1>
+<p><strong>Core–Periphery Structure</strong></p>
+<p>Spatial visualizations reveal a clear core–periphery divide:</p>
+<ul>
+<li><p>The central city and select North Side neighborhoods show high total and per-capita access.</p></li>
+<li><p>Large portions of the South, Southwest, and Far Northwest Sides fall into the lowest-access categories.</p></li>
+</ul>
+<p>This structure mirrors long-standing patterns in both commercial development and public investment.</p>
+<p><strong>Implications for Residents</strong></p>
+<p>A resident in a lower-access neighborhood faces longer travel times for basic goods, fewer options for affordable and healthy food, and reduced convenience compared to residents in central corridors.</p>
+<p>These burdens compound existing socioeconomic inequities and may reinforce broader disparities in health, economic mobility, and neighborhood stability.</p>
+</section>
+<section id="policy-implications" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Policy Implications</h1>
+<p><strong>Strengthening Retail Availability in Underserved Areas</strong></p>
+<p>Findings point to several potential strategies:</p>
+<ul>
+<li><p>Targeted retail incentives in communities with low per-capita access</p></li>
+<li><p>Mixed-use zoning reforms to expand commercial corridors in underserved neighborhoods</p></li>
+<li><p>Support for small grocers and culturally specific food retailers</p></li>
+<li><p>Public–private partnerships aimed at increasing local food availability</p></li>
+</ul>
+<p>Such interventions should be paired with community-led planning to ensure that investments align with resident needs.</p>
+<p><strong>Integrating Transit and Retail Planning</strong></p>
+<p>Because many low-access communities are also transit-limited, aligning CTA planning with retail investment could strengthen neighborhood resilience. Improved bus frequency, new stop placement near commercial corridors, or micro-mobility options could meaningfully increase access without major retail expansion.</p>
+<p><strong>Equity Considerations</strong></p>
+<p>The concentration of retail access in wealthier and more centrally located neighborhoods raises questions about equitable distribution of commercial opportunities. Policymakers should consider food access alongside broader equity frameworks that address historical disinvestment, land-use constraints, and neighborhood-level resource gaps.</p>
+</section>
+<section id="conclusions" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Conclusions</h1>
+<p>Chicago’s food retail landscape displays striking geographic and socioeconomic disparities that shape residents’ daily access to essential goods. While high-access communities benefit from dense, mixed-use commercial environments, many South and Northwest Side neighborhoods face low per-capita availability that may impede food security and economic mobility.</p>
+<p>This analysis demonstrates that both income and population contribute meaningfully to access—but do not fully explain it—suggesting that zoning, land-use history, and commercial corridor patterns also play critical roles. Ultimately, these findings underscore the need for coordinated planning efforts that prioritize retail equity as part of broader neighborhood development strategies.</p>
+</section>
+<section id="future-directions" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Future Directions</h1>
+<p>Future extensions of this work could include:</p>
+<ul>
+<li><p>Incorporating CTA GTFS networks to assess transit-based access</p></li>
+<li><p>Modeling non-linear relationships using GAM or spatial regression</p></li>
+<li><p>Integrating economic data from the IRS SOI or property assessments</p></li>
+<li><p>Conducting block-group–level analysis for higher spatial precision</p></li>
+<li><p>Adding qualitative insights from neighborhood planning documents</p></li>
+</ul>
+<p>Such additions would deepen the understanding of how retail access interacts with Chicago’s built environment and socioeconomic landscape.</p>
 
 
 </section>

@@ -23,7 +23,7 @@ configuration of the city itself.
 
 # Key Analytical Findings
 
-**2.1 Neighborhood-Level Variation in Retail Access**
+**Neighborhood-Level Variation in Retail Access**
 
 Across Chicago, food retailer availability is highly uneven, with a
 small group of central-city neighborhoods dominating total store counts.
@@ -43,7 +43,7 @@ single-digit access levels.
 In effect, residents in some neighborhoods have five to ten times the
 retail availability experienced in others.
 
-**2.2 High-Access and Low-Access Neighborhood Profiles**
+**High-Access and Low-Access Neighborhood Profiles**
 
 The ten neighborhoods with the highest stores-per-capita values are
 overwhelmingly located in or adjacent to the central business district.
@@ -62,7 +62,7 @@ environments even when modest retail exists.
 These disparities point to structural geographic patterns rather than
 isolated anomalies.
 
-**2.3 Distributional Inequality**
+**Distributional Inequality**
 
 Dispersion measures reinforce these patterns. A standard deviation of
 \~10 stores per 10,000 residents—nearly equal to the median—signals
@@ -78,7 +78,7 @@ they live.
 
 # Socioeconomic Drivers of Access
 
-**3.1 Income as a Predictor of Retail Availability**
+**Income as a Predictor of Retail Availability**
 
 Regression modeling showed that median household income is significantly
 and positively associated with per-capita retail access. Wealthier
@@ -93,7 +93,7 @@ does not capture the full set of forces that determine retail presence.
 Zoning, land use, historical investment, and the location of commercial
 corridors all likely play significant roles.
 
-**3.2 Population Size and Commercial Concentration**
+**Population Size and Commercial Concentration**
 
 Total population also shows a positive relationship with retail access,
 but its influence is more modest. Larger communities may sustain more
@@ -106,17 +106,20 @@ city’s retail landscape, but not all of it.
 
 # Spatial Patterns and Geographic Equity
 
-**4.1 Core–Periphery Structure**
+**Core–Periphery Structure**
 
-Spatial visualizations reveal a clear core–periphery divide: • The
-central city and select North Side neighborhoods show high total and
-per-capita access. • Large portions of the South, Southwest, and Far
-Northwest Sides fall into the lowest-access categories.
+Spatial visualizations reveal a clear core–periphery divide:
+
+-   The central city and select North Side neighborhoods show high total
+    and per-capita access.
+
+-   Large portions of the South, Southwest, and Far Northwest Sides fall
+    into the lowest-access categories.
 
 This structure mirrors long-standing patterns in both commercial
 development and public investment.
 
-**4.2 Implications for Residents**
+**Implications for Residents**
 
 A resident in a lower-access neighborhood faces longer travel times for
 basic goods, fewer options for affordable and healthy food, and reduced
@@ -128,7 +131,7 @@ neighborhood stability.
 
 # Policy Implications
 
-**5.1 Strengthening Retail Availability in Underserved Areas**
+**Strengthening Retail Availability in Underserved Areas**
 
 Findings point to several potential strategies:
 
@@ -145,7 +148,7 @@ Findings point to several potential strategies:
 Such interventions should be paired with community-led planning to
 ensure that investments align with resident needs.
 
-**5.2 Integrating Transit and Retail Planning**
+**Integrating Transit and Retail Planning**
 
 Because many low-access communities are also transit-limited, aligning
 CTA planning with retail investment could strengthen neighborhood
@@ -153,7 +156,7 @@ resilience. Improved bus frequency, new stop placement near commercial
 corridors, or micro-mobility options could meaningfully increase access
 without major retail expansion.
 
-**5.3 Equity Considerations**
+**Equity Considerations**
 
 The concentration of retail access in wealthier and more centrally
 located neighborhoods raises questions about equitable distribution of
