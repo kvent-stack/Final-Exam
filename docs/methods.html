@@ -192,7 +192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="data-acquisition" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Data Acquisition</h1>
-<p>To build a reproducible pipeline for measuring neighborhood-level food retail access, I acquired two primary datasets through API calls: (1) Chicago’s business license dataset, which includes active food retailers, and (2) Chicago’s community area boundary file, which defines the geographic units of analysis. I also accessed tract-level population estimates from the 2022 American Community Survey (ACS) using the Census API.</p>
+<p>To measure neighborhood-level access to food retailers, I assembled a reproducible pipeline using three components: Chicago’s business-license dataset (to identify active retailers), community-area boundaries (to anchor spatial joins), and ACS tract-level population totals (to construct per-capita access measures).</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>biz_url <span class="ot">=</span> <span class="st">"https://data.cityofchicago.org/resource/xqx5-8hwx.geojson?$limit=50000"</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>biz <span class="ot">=</span> <span class="fu">st_read</span>(biz_url)</span>
@@ -444,7 +444,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 10  2025-12-05</code></pre>
 </div>
 </div>
-<p><u><strong>Quality Check:</strong></u> The missingness check shows that while the dataset is structurally intact, several fields contain non-critical gaps-most notably application_created_date, license_status_change_date, and ssa. These variables are administrative fields that do not affect spatial accuracy or the ability to identify active food retailers, so their missingness does not threaten the integrity of the analysis. Core fields required for this project-license status, license type, latitude/longitude coordinates, and community identifiers-are complete enough for reliable filtering and spatial joins. With 10,210 active food retail records, the dataset offers robust coverage across the city.</p>
+<p><u><strong>Quality Check:</strong></u> The missingness pattern confirms that the gaps occur primarily in administrative timestamp fields rather than in coordinates or licensing descriptors. Because the core spatial and classification variables are intact, the dataset is suitable for retailer identification and spatial assignment.</p>
 <p>Next, I standardized coordinate systems for spatial alignment and assigned each food retailer to a community area through a point-in-polygon spatial join. I then aggregated food retail counts by community and checked for representation across all 77 areas.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>grocery <span class="ot">=</span> <span class="fu">st_transform</span>(grocery, <span class="fu">st_crs</span>(chi_comm))</span>
