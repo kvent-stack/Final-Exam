@@ -3,11 +3,17 @@ project:
   output-dir: docs
 
 website:
-  title: "PA446 Final Project — Retail Access"
+  title: "PA 446 Final Project — Retail Access"
   navbar:
     left:
       - href: index.qmd
         text: Home
+      - href: methods.qmd
+        text: Data & Methods
+      - href: analysis.qmd
+        text: Analysis
+      - href: findings.qmd
+        text: Findings
     right:
       - icon: github
         href: https://github.com/kvent-stack/Final-Exam

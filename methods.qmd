@@ -1,0 +1,7 @@
+---
+title: "Data & Methods"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
