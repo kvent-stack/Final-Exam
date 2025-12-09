@@ -174,16 +174,47 @@ resilience. Improved bus frequency, new stop placement near commercial
 corridors, or micro-mobility options could meaningfully increase access
 without major retail expansion.
 
+# **Equity Considerations**
+
+[**Data Biases**]{.underline}
+
+While this analysis highlights meaningful disparities in retail access
+across Chicago, it is equally important to recognize the limitations and
+potential biases embedded in the underlying data sources. The
+business-license dataset captures only establishments registered with
+the City of Chicago, which may omit informal retailers, unlicensed
+vendors, or small grocers that operate under broader business
+classifications. These omissions can disproportionately affect
+lower-income or immigrant neighborhoods where informal food economies
+are more common, leading to an undercount of available retail options
+and potentially overstating access inequities.
+
+The ACS population estimates introduce another layer of uncertainty.
+Tract-level data are modeled rather than directly measured, and sampling
+error tends to be highest in communities with large renter populations,
+limited census engagement, or significant racial and economic
+segregation. As a result, per-capita metrics may unintentionally magnify
+or suppress disparities depending on the direction of local estimation
+error.
+
 ------------------------------------------------------------------------
 
-[**Equity Considerations**]{.underline}
+[**Responsible Policy Interpretation**]{.underline}
 
-The concentration of retail access in wealthier and more centrally
-located neighborhoods raises questions about equitable distribution of
-commercial opportunities. Policymakers should consider food access
-alongside broader equity frameworks that address historical
-disinvestment, land-use constraints, and neighborhood-level resource
-gaps.
+These limitations matter for decision-making. If policymakers rely
+solely on formal datasets, they risk reinforcing existing inequities by
+directing resources toward neighborhoods that appear most underserved on
+paper - even when informal or culturally specific food networks play a
+significant role in local economies. Conversely, neighborhoods with
+strong retail investment but rapid population growth may appear
+artificially well-resourced, masking emerging gaps in access.
+
+To ethically present these findings to policymakers, I would emphasize
+three commitments: transparency about data limits, caution against
+overgeneralization and framing the analysis as a diagnostic tool, not an
+absolute ranking. Together, these considerations ensure that the
+analysis supports equitable policymaking rather than unintentionally
+reinforcing the structural biases embedded in Chicago’s data ecosystem.
 
 # Conclusions
 
